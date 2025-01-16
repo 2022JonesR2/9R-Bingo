@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Card Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .bingo-card {
+            display: grid;
+            grid-template-columns: repeat(5, 100px);
+            grid-template-rows: repeat(5, 100px);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 550px;
+        }
+
+        .bingo-card div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+            border: 1px solid #aaa;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Adding a "loading" state for the button */
+        .loading {
+            background-color: #ffc107;
+            pointer-events: none; /* Disable the button during loading */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bingo Card</h1>
+        <div id="bingoCard" class="bingo-card">
+            <!-- Bingo card will be generated here -->
+        </div>
+        <button id="generateButton" onclick="generateBingoCard()">Generate New Card</button>
+    </div>
+
+    <script>
+        const bingoStrings = [
+            "FREE only on tuesday", "Taylor is zesty", "Ryan reinacts riddy !!!!",
+            "Riley tells someone to kys", "Ethan T goes to drums",
+            "Morgan breaks his glasses", "Someone walks into the lesson",
+            "Miss Carol is a dickhead", "Cody sings fein", "Someone makes fun of Sophia Goode",
+            "Morgan has chicken nuggets", "Cohan tries to bang Olivia in the classroom", "Caiean does something gay",
+            "Jayden flirts with women", "Scrap on.", "Alice shows up for once.", "Girls argue over something stupid",
+            "Someone calls Sophia Goodes mother a fat cow.", "Cody acts like a retard", "Oliver Lerwill 2.0", 
+            "Someone says something unfunny", "Riddy 2.0", "Cian barks", "Keli gets called a monkey", "Someone screams the nword in the classroom"
+        ];
+
+        // Function to generate a new Bingo card
+        function generateBingoCard() {
+            const card = document.getElementById('bingoCard');
+            const button = document.getElementById('generateButton');
+
+            // Disable the button while generating the card (loading state)
+            button.classList.add('loading');
+            button.innerText = 'Generating...';
+
+            card.innerHTML = ''; // Clear existing card
+
+            // Shuffle bingoStrings array (simple Fisher-Yates shuffle)
+            const shuffledStrings = shuffleArray([...bingoStrings]);
+
+            // Generate 5x5 Bingo card
+            let index = 0;
+            setTimeout(() => {
+                for (let row = 0; row < 5; row++) {
+                    for (let col = 0; col < 5; col++) {
+                        let cell = document.createElement('div');
+                        
+                        cell.innerText = shuffledStrings[index];
+                        index++;
+
+                        cell.addEventListener("click", (ev) => {
+                            if (cell.style.backgroundColor == "red") {
+                                cell.style.backgroundColor = ""
+                                return;
+                            }
+
+                            cell.style.backgroundColor = "red"
+
+
+                        })
+
+                        card.appendChild(cell);
+                    }
+                }
+
+                // Re-enable the button and reset its text after generating the card
+                button.classList.remove('loading');
+                button.innerText = 'Generate New Card';
+            }, 500); // Simulate a small delay for loading
+        }
+
+        // Simple function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+
+        // Generate an initial Bingo card when the page loads
+        generateBingoCard();
+    </script>
+</body>
+</html>
